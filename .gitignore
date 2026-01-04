@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyTorch models and features
+*.pth
+*.pt
+*.ckpt
+*.weights
+*.pkl
+*.pickle
+features*.pkl
+encoder_*.pkl
+decoder_*.pkl
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# LaTeX
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.ps
+
+# Keep the final PDF
+# report/*.pdf
+
+# Data & Images (large datasets)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+content/clean_data_flickr30k/Images/
+content/clean_data_flickr8k/Images/
+**/Images/flickr*_images/
+**/flickr*_images/
+EfficientNet_LSTM_Attention/content/clean_data_flickr30k/Images/flickr30k_images/
+
+# TensorBoard logs
+runs/
+Dec*/
+efficientnet_*/
+
+# Results & Checkpoints (large model files)
+*.csv
+best_model_*.pth
+
+# Temporary files
+*.tmp
+*.temp
+~$*

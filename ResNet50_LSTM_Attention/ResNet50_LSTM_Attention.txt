@@ -1,0 +1,272 @@
+(fer) C:\Users\LAPTOP\Documents\Code\Python> python -u "C:\Users\LAPTOP\Documents\Code\Python\ImageCaption.py"
+2025-12-11 19:17:05.715145: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-12-11 19:17:13.828163: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+======================================================================
+CONFIGURATION
+======================================================================
+Device: cuda
+Batch Size: 32
+Epochs: 50
+Learning Rate: 0.0001
+Embed Size: 256
+Hidden Size: 512
+Attention Dim: 512
+Feature shape: (49, 2048)
+======================================================================
+Loaded features for 8091 images
+
+Loading captions...
+Loaded captions for 8091 images
+Cleaning captions...
+Building vocabulary...
+Vocab size: 8369, Max caption length: 34
+Train images: 7281, Test images: 810
+Train batches: 1138, Val batches: 127
+Total params: 16,928,690, Trainable: 16,928,690
+C:\Users\LAPTOP\anaconda3\envs\fer\Lib\site-packages\torch\optim\lr_scheduler.py:62: UserWarning: The verbose parameter is deprecated. Please use get_last_lr() to access the learning rate.
+  warnings.warn(
+
+======================================================================
+STARTING TRAINING
+======================================================================
+Epoch 1/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:12<00:00,  3.64it/s, loss=5.2665]
+Epoch 1/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.79it/s, loss=4.3675] 
+
+Epoch 1/50
+Train Loss: 5.2453 | Val Loss: 4.5339
+LR: 0.000100
+Model saved to .\content\clean_data_flickr8k\best_model_resnet50_attention.pth
+✓ New best model! Val Loss: 4.5339
+Epoch 2/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:07<00:00,  3.71it/s, loss=3.9815] 
+Epoch 2/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.97it/s, loss=4.0088] 
+
+Epoch 2/50
+Train Loss: 4.4535 | Val Loss: 4.1680
+LR: 0.000100
+Model saved to .\content\clean_data_flickr8k\best_model_resnet50_attention.pth
+✓ New best model! Val Loss: 4.1680
+Epoch 3/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:05<00:00,  3.73it/s, loss=3.6935] 
+Epoch 3/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.90it/s, loss=3.7877] 
+
+Epoch 3/50
+Train Loss: 4.1430 | Val Loss: 3.9814
+LR: 0.000100
+Model saved to .\content\clean_data_flickr8k\best_model_resnet50_attention.pth
+✓ New best model! Val Loss: 3.9814
+Epoch 4/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:03<00:00,  3.75it/s, loss=4.0257] 
+Epoch 4/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.79it/s, loss=3.6349] 
+
+Epoch 4/50
+Train Loss: 3.9271 | Val Loss: 3.8624
+LR: 0.000100
+Model saved to .\content\clean_data_flickr8k\best_model_resnet50_attention.pth
+✓ New best model! Val Loss: 3.8624
+Epoch 5/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:02<00:00,  3.76it/s, loss=4.0495] 
+Epoch 5/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.71it/s, loss=3.5758] 
+
+Epoch 5/50
+Train Loss: 3.7614 | Val Loss: 3.7590
+LR: 0.000100
+Model saved to .\content\clean_data_flickr8k\best_model_resnet50_attention.pth
+✓ New best model! Val Loss: 3.7590
+Epoch 6/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:03<00:00,  3.76it/s, loss=3.4349] 
+Epoch 6/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.81it/s, loss=3.5214] 
+
+Epoch 6/50
+Train Loss: 3.6203 | Val Loss: 3.7326
+LR: 0.000100
+Model saved to .\content\clean_data_flickr8k\best_model_resnet50_attention.pth
+✓ New best model! Val Loss: 3.7326
+Epoch 7/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:03<00:00,  3.74it/s, loss=3.8934] 
+Epoch 7/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.71it/s, loss=3.3926] 
+
+Epoch 7/50
+Train Loss: 3.4996 | Val Loss: 3.6561
+LR: 0.000100
+Model saved to .\content\clean_data_flickr8k\best_model_resnet50_attention.pth
+✓ New best model! Val Loss: 3.6561
+Epoch 8/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:05<00:00,  3.72it/s, loss=3.6316] 
+Epoch 8/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:11<00:00, 11.41it/s, loss=3.4231] 
+
+Epoch 8/50
+Train Loss: 3.3946 | Val Loss: 3.6612
+LR: 0.000100
+No improvement for 1 epoch(s)
+Epoch 9/50 [Train]: 100%|████████████████████████████████████████████████████| 1138/1138 [05:02<00:00,  3.76it/s, loss=3.3021] 
+Epoch 9/50 [Val]: 100%|████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.77it/s, loss=3.4017] 
+
+Epoch 9/50
+Train Loss: 3.2975 | Val Loss: 3.6227
+LR: 0.000100
+Model saved to .\content\clean_data_flickr8k\best_model_resnet50_attention.pth
+✓ New best model! Val Loss: 3.6227
+Epoch 10/50 [Train]: 100%|███████████████████████████████████████████████████| 1138/1138 [05:04<00:00,  3.74it/s, loss=3.1268] 
+Epoch 10/50 [Val]: 100%|███████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.87it/s, loss=3.3612] 
+
+Epoch 10/50
+Train Loss: 3.2094 | Val Loss: 3.6241
+LR: 0.000100
+No improvement for 1 epoch(s)
+Epoch 11/50 [Train]: 100%|███████████████████████████████████████████████████| 1138/1138 [05:07<00:00,  3.70it/s, loss=3.2486] 
+Epoch 11/50 [Val]: 100%|███████████████████████████████████████████████████████| 127/127 [00:12<00:00, 10.21it/s, loss=3.3467] 
+
+Epoch 11/50
+Train Loss: 3.1265 | Val Loss: 3.6269
+LR: 0.000100
+No improvement for 2 epoch(s)
+Epoch 12/50 [Train]: 100%|███████████████████████████████████████████████████| 1138/1138 [05:08<00:00,  3.69it/s, loss=2.9996] 
+Epoch 12/50 [Val]: 100%|███████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.87it/s, loss=3.2924] 
+
+Epoch 12/50
+Train Loss: 3.0516 | Val Loss: 3.6601
+LR: 0.000100
+No improvement for 3 epoch(s)
+Epoch 13/50 [Train]: 100%|███████████████████████████████████████████████████| 1138/1138 [05:03<00:00,  3.75it/s, loss=2.9814] 
+Epoch 13/50 [Val]: 100%|███████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.87it/s, loss=3.2950] 
+
+Epoch 13/50
+Train Loss: 2.9499 | Val Loss: 3.6441
+LR: 0.000050
+No improvement for 4 epoch(s)
+Epoch 14/50 [Train]: 100%|███████████████████████████████████████████████████| 1138/1138 [05:13<00:00,  3.63it/s, loss=2.9633] 
+Epoch 14/50 [Val]: 100%|███████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.89it/s, loss=3.3228] 
+
+Epoch 14/50
+Train Loss: 2.9054 | Val Loss: 3.6687
+LR: 0.000050
+No improvement for 5 epoch(s)
+Epoch 15/50 [Train]: 100%|███████████████████████████████████████████████████| 1138/1138 [05:10<00:00,  3.67it/s, loss=2.8708] 
+Epoch 15/50 [Val]: 100%|███████████████████████████████████████████████████████| 127/127 [00:12<00:00, 10.38it/s, loss=3.3368] 
+
+Epoch 15/50
+Train Loss: 2.8674 | Val Loss: 3.6818
+LR: 0.000050
+No improvement for 6 epoch(s)
+Epoch 16/50 [Train]: 100%|███████████████████████████████████████████████████| 1138/1138 [04:47<00:00,  3.96it/s, loss=3.0981]
+Epoch 16/50 [Val]: 100%|███████████████████████████████████████████████████████| 127/127 [00:10<00:00, 12.13it/s, loss=3.3200]
+
+Epoch 16/50
+Train Loss: 2.8137 | Val Loss: 3.6842 
+LR: 0.000025
+No improvement for 7 epoch(s)                           
+Epoch 17/50 [Train]: 100%|██████████████████████████████████████████████████████████████████████| 1138/1138 [04:45<00:00,  3.99it/s, loss=2.5811]
+Epoch 17/50 [Val]: 100%|██████████████████████████████████████████████████████████████████████████| 127/127 [00:09<00:00, 13.83it/s, loss=3.3063]
+
+Epoch 17/50
+Train Loss: 2.7920 | Val Loss: 3.6937
+LR: 0.000025
+No improvement for 8 epoch(s)
+Epoch 18/50 [Train]: 100%|██████████████████████████████████████████████████████████████████████| 1138/1138 [04:59<00:00,  3.80it/s, loss=2.5029] 
+Epoch 18/50 [Val]: 100%|██████████████████████████████████████████████████████████████████████████| 127/127 [00:10<00:00, 11.81it/s, loss=3.3639] 
+
+Epoch 18/50
+Train Loss: 2.7707 | Val Loss: 3.7011
+LR: 0.000025
+No improvement for 9 epoch(s)
+Epoch 19/50 [Train]: 100%|██████████████████████████████████████████████████████████████████████| 1138/1138 [05:16<00:00,  3.60it/s, loss=2.6716] 
+Epoch 19/50 [Val]: 100%|██████████████████████████████████████████████████████████████████████████| 127/127 [00:12<00:00, 10.08it/s, loss=3.3386] 
+
+Epoch 19/50
+Train Loss: 2.7425 | Val Loss: 3.7062
+LR: 0.000013
+No improvement for 10 epoch(s)
+Epoch 20/50 [Train]: 100%|██████████████████████████████████████████████████████████████████████| 1138/1138 [05:23<00:00,  3.51it/s, loss=3.1508]
+Epoch 20/50 [Val]: 100%|██████████████████████████████████████████████████████████████████████████| 127/127 [00:11<00:00, 10.96it/s, loss=3.3599] 
+
+Epoch 20/50
+Train Loss: 2.7319 | Val Loss: 3.7203
+LR: 0.000013
+No improvement for 11 epoch(s)
+Epoch 21/50 [Train]: 100%|██████████████████████████████████████████████████████████████████████| 1138/1138 [05:23<00:00,  3.52it/s, loss=2.7337] 
+Epoch 21/50 [Val]: 100%|██████████████████████████████████████████████████████████████████████████| 127/127 [00:11<00:00, 10.92it/s, loss=3.3526] 
+
+Epoch 21/50
+Train Loss: 2.7240 | Val Loss: 3.7317
+LR: 0.000013
+No improvement for 12 epoch(s)
+Epoch 22/50 [Train]: 100%|██████████████████████████████████████████████████████████████████████| 1138/1138 [05:22<00:00,  3.53it/s, loss=2.5724] 
+Epoch 22/50 [Val]: 100%|██████████████████████████████████████████████████████████████████████████| 127/127 [00:11<00:00, 11.24it/s, loss=3.3512] 
+
+Epoch 22/50
+Train Loss: 2.7074 | Val Loss: 3.7304
+LR: 0.000006
+No improvement for 13 epoch(s)
+Epoch 23/50 [Train]: 100%|██████████████████████████████████████████████████████████████████████| 1138/1138 [05:01<00:00,  3.78it/s, loss=2.6990] 
+Epoch 23/50 [Val]: 100%|██████████████████████████████████████████████████████████████████████████| 127/127 [00:09<00:00, 13.64it/s, loss=3.3354] 
+
+Epoch 23/50
+Train Loss: 2.7010 | Val Loss: 3.7163
+LR: 0.000006
+No improvement for 14 epoch(s)
+Epoch 24/50 [Train]: 100%|██████████████████████████████████████████████████████████████████████| 1138/1138 [04:49<00:00,  3.92it/s, loss=2.6198] 
+Epoch 24/50 [Val]: 100%|██████████████████████████████████████████████████████████████████████████| 127/127 [00:09<00:00, 13.00it/s, loss=3.3639] 
+
+Epoch 24/50
+Train Loss: 2.6958 | Val Loss: 3.7362
+LR: 0.000006
+No improvement for 15 epoch(s)
+Early stopping after 24 epochs
+
+TRAINING COMPLETED
+
+C:\Users\LAPTOP\Documents\Code\Python\ImageCaption.py:702: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(Config.MODEL_SAVE_PATH, map_location=Config.DEVICE)
+Loaded best model from epoch 9 with val loss 3.6227
+Generating captions: 100%|█████████████████████████████████████████████████████████████████████████████████████| 810/810 [00:39<00:00, 20.69it/s]
+
+BLEU scores:
+BLEU-1: 0.5166
+BLEU-2: 0.3546
+BLEU-3: 0.2372
+BLEU-4: 0.1491
+
+============================================================
+Image ID: 3066429707_842e50b8f7
+ACTUAL CAPTIONS:
+1. startseq child in blue uniform kicks soccer ball endseq
+2. startseq girl red shoe sole is shown as the soccer ball flies through the air endseq
+3. startseq young girl is kicking soccer ball in the grass endseq
+4. startseq blond girl in blue clothes playing soccer endseq
+5. startseq the girl in blue kicks the soccer ball endseq
+
+PREDICTED (greedy):
+girl in red shirt is playing soccer
+
+PREDICTED (beam size=3):
+girl in red shirt is playing soccer
+============================================================
+
+
+============================================================
+Image ID: 476740978_45b65ebe0c
+ACTUAL CAPTIONS:
+1. startseq group of people are holding up signs endseq
+2. startseq group of people carry pink letters that spell impeach endseq
+3. startseq many woman hold up sign reading impeach endseq
+4. startseq people holding pink signs that spell out impeach endseq
+5. startseq war protesters on curb with pink umbrellas spelling out impeach endseq
+
+PREDICTED (greedy):
+group of people in pink shirts are standing on the street
+
+PREDICTED (beam size=3):
+group of people stand on the street
+============================================================
+
+
+============================================================
+Image ID: 3428386573_670f5362f0
+ACTUAL CAPTIONS:
+1. startseq male tennis player standing on tennis court swings his tennis racket at the tennis ball endseq
+2. startseq man plays tennis endseq
+3. startseq man wearing white turns to hit yellow tennis ball endseq
+4. startseq tennis player focuses on the ball as he prepares to hit it while cameraman stands in the background next to la quinta advertising logo endseq
+5. startseq the tennis player holds his racket up anticipating the ball endseq
+
+PREDICTED (greedy):
+man in white shirt and white shirt and white shirt and white shirt and white shirt and white shirt and white shirt and white shirt and white shirt and white shirt and white
+
+PREDICTED (beam size=3):
+man in white shirt is playing tennis
+============================================================
+

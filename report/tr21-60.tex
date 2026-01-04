@@ -1,0 +1,321 @@
+\documentclass[graybox]{svmult}
+
+
+% choose options for [] as required from the list % in the
+%Reference Guide
+
+\usepackage{mathptmx}       % selects Times Roman as basic font
+\usepackage{helvet}         % selects Helvetica as sans-serif font
+\usepackage{courier}        % selects Courier as typewriter font
+\usepackage{type1cm}        % activate if the above 3 fonts are
+                            % not available on your system
+%
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool
+                             % when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+% -----------------------------------------------------------------------------------
+
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{xcolor, soulutf8}
+\newcommand{\highlight}[1]{\colorbox{yellow!50}{#1}}
+% \usepackage{outlines}
+% \usepackage{fancybox} % Tạo khung box
+% \usepackage{amsthm} % Cho phép thêm các môi trường định nghĩa
+% \usepackage{latexsym} % Các kí hiệu toán học
+% \usepackage{amsmath} % Hỗ trợ một số biểu thức toán học
+% \usepackage{amssymb} % Bổ sung thêm kí hiệu về toán học
+% \usepackage{amsbsy} % Hỗ trợ các kí hiệu in đậm
+% \usepackage{array} % Tạo bảng array
+\usepackage{enumitem} % Cho phép thay đổi kí hiệu của list
+% \usepackage{subfiles} % Chèn các file nhỏ, giúp chia các chapter ra nhiều file hơn
+\usepackage[small,compact]{titlesec} % Giúp chỉnh sửa các tiêu đề, đề mục như chương, phần,..
+\titlespacing{\section}{0pt}{*4}{*1.5}
+\usepackage{titletoc}
+% \usepackage{chngcntr} % Dùng để thiết lập lại cách đánh số caption,..
+\usepackage{pdflscape} % Đưa các bảng có kích thước đặt theo chiều ngang giấy
+% \usepackage{afterpage}
+% \usepackage[ruled,vlined]{algorithm2e}  % Hỗ trợ viết các giải thuật
+% \usepackage{capt-of} % Cho phép sử dụng caption lớn đối với landscape page
+% \usepackage{multirow} % Merge cells
+% \usepackage{fancyhdr} % Cho phép tùy biến header và footer
+% \usepackage{microtype}
+% \usepackage[natbib,backend=biber,style=ieee]{biblatex} % Giúp chèn tài liệu tham khảo
+% \usepackage{parskip}
+% \usepackage{listings}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{setspace}
+\edef\restoreparindent{\parindent=\the\parindent\relax}
+\usepackage{parskip}
+\restoreparindent
+\usepackage[utf8]{inputenc} % Cho phép nhập ký tự Unicode
+\usepackage[T5]{fontenc}    % Quan trọng: Bảng mã font T5 cho tiếng Việt
+\usepackage[vietnamese]{babel} % Hỗ trợ quy tắc ngắt dòng, đổi tên 'Table of Contents' -> 'Mục lục'
+% % package content table
+% \usepackage{tocbasic}
+
+% \usepackage{blindtext}
+
+% % custom packages
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{tabularray}
+\usepackage{lineno}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{scrextend} 
+ \usepackage{multirow}			% Multirow tables
+ \usepackage{subfig}
+\usepackage{array}
+\usepackage{lineno}
+\usepackage{graphicx}
+\usepackage{scrextend} 
+% to typeset URLs, URIs, and DOIs
+\usepackage{url}
+\usepackage{mathtools}
+%  \usepackage[dvips]{graphicx}
+%  \usepackage{epsfig}
+%  \usepackage{array}
+ \usepackage{epsf}
+% \usepackage{subfigure}
+\usepackage{indentfirst}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+\renewcommand\tabularxcolumn[1]{m{#1}}
+\newcommand{\itemEq}[1]{%
+        \begingroup%
+        \setlength{\abovedisplayskip}{0pt}%
+        \setlength{\belowdisplayskip}{0pt}%
+        \parbox[c]{\linewidth}{\begin{flalign}#1&&\end{flalign}}%
+        \endgroup}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+% see the list of further useful packages % in the Reference Guide
+
+\makeindex             % used for the subject index
+                       % please use the style svind.ist with
+                       % your makeindex program
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\input{chapters/coverpage/coverpage}
+\title*{Ứng dụng kiến trúc Encoder-Decoder với CNN và LSTM cho bài toán gán nhãn ảnh.}
+\titlerunning{Title}
+\author{Tạ Quốc Tuấn , Phan Trọng Đức , Đoàn Ngọc Toàn , Lê Văn Quang Trung}
+
+\authorrunning{}
+
+
+\maketitle
+
+\abstract*{}
+
+\abstract{Trong lĩnh vực Trí tuệ nhân tạo hiện đại, bài toán sinh mô tả ảnh tự động (Image Captioning) đóng vai trò quan trọng trong việc thu hẹp khoảng cách giữa Thị giác máy tính và Xử lý ngôn ngữ tự nhiên. Trong báo cáo này, nhóm em xin trình bày quy trình xây dựng và đánh giá một mô hình học sâu có khả năng tự động sinh ra các câu mô tả ngữ nghĩa cho hình ảnh đầu vào.Phương pháp tiếp cận của nhóm em dựa trên kiến trúc Encoder-Decoder, trong đó tận dụng kỹ thuật Học chuyển giao (Transfer Learning) để tối ưu hóa quá trình trích xuất đặc trưng. Cụ thể, ở phần Encoder, nhóm em đã tiến hành thử nghiệm lần lượt với các mô hình Convolutional Neural Network (CNN) đã được huấn luyện trước (Pre-trained models) bao gồm ResNet50, EfficientNetB2 và EfficientNetB3. Các vector đặc trưng sau khi trích xuất sẽ được đưa vào mạng nơ-ron hồi quy (LSTM) đóng vai trò là Decoder để sinh ra chuỗi văn bản tương ứng.Mô hình được nhóm em huấn luyện và kiểm thử trên tập dữ liệu chuẩn Flickr8k và Flickr30k. Hiệu năng của các mô hình được đánh giá định lượng thông qua chỉ số BLEU Score và đánh giá định tính qua khả năng sinh ngữ nghĩa của câu. Kết quả thực nghiệm cho thấy việc sử dụng [Tên model tốt nhất, ví dụ: EfficientNetB3] mang lại kết quả vượt trội hơn so với các kiến trúc còn lại với chỉ số BLEU-4 đạt [Điền số]. Đề tài này không chỉ giúp nhóm em nắm vững kiến trúc Encoder-Decoder mà còn cung cấp cơ sở để so sánh tác động của các bộ trích xuất đặc trưng khác nhau đối với chất lượng sinh văn bản.}
+
+\keywords{Image Captioning, Deep Learning, Transfer Learning, ResNet50, EfficientNet, LSTM, Flickr8k}
+
+\section{Giới thiệu}\label{sec:rel_res}
+\subsection{Đặt vấn đề}
+\indent Trong kỷ nguyên số hóa hiện nay, hình ảnh là một trong những dạng dữ liệu phổ biến nhất trên Internet. Đối với con người, việc nhìn vào một bức ảnh và mô tả nội dung của nó là một phản xạ tự nhiên và dễ dàng. Tuy nhiên, đối với máy tính, đây là một thách thức lớn, đòi hỏi sự kết hợp phức tạp giữa hai lĩnh vực mũi nhọn của Trí tuệ nhân tạo: Thị giác máy tính (Computer Vision) để "nhìn" hiểu nội dung ảnh và Xử lý ngôn ngữ tự nhiên (Natural Language Processing) để "diễn đạt" nội dung đó thành ngôn ngữ con người.
+
+\indent Bài toán Image Captioning (Sinh mô tả ảnh) ra đời nhằm giải quyết thách thức này. Không chỉ mang ý nghĩa học thuật, Image Captioning còn có giá trị thực tiễn to lớn, như hỗ trợ người khiếm thị hiểu được nội dung hình ảnh thông qua giọng nói (Text-to-Speech), tối ưu hóa công cụ tìm kiếm hình ảnh (SEO), hay tự động phân loại dữ liệu trên mạng xã hội.
+
+\indent Nhận thấy tầm quan trọng và sự thú vị của chủ đề này, nhóm em đã quyết định lựa chọn đề tài làm bài tập lớn cho môn học.
+\subsection{Mục tiêu đề tài}
+Mục tiêu chính của đề tài là xây dựng hoàn chỉnh một hệ thống học sâu có khả năng nhận đầu vào là một bức ảnh bất kỳ và sinh ra một câu mô tả tiếng Anh tương ứng với nội dung chính xác nhất. Cụ thể, nhóm em tập trung vào các mục tiêu sau:
+
+\begin{enumerate}
+    \item \textbf{Nghiên cứu kiến trúc Encoder-Decoder:} Hiểu và cài đặt mô hình kết hợp giữa Mạng nơ-ron tích chập (CNN) và Mạng nơ-ron hồi quy (LSTM).
+    \item \textbf{Ứng dụng kỹ thuật Transfer Learning:} Sử dụng và so sánh hiệu quả trích xuất đặc trưng của các mô hình tiên tiến đã được huấn luyện trước (Pre-trained models) là \textbf{ResNet50}, \textbf{EfficientNetB2} và \textbf{EfficientNetB3}.
+    \item \textbf{Đánh giá hiệu năng:} So sánh kết quả sinh văn bản giữa các kiến trúc backbone khác nhau thông qua các chỉ số định lượng (BLEU Score) và định tính.
+\end{enumerate}
+\subsection{Phạm vi nghiên cứu}
+Để phù hợp với khuôn khổ bài tập lớn và tài nguyên tính toán giới hạn, nhóm em xác định phạm vi nghiên cứu như sau:
+
+\begin{itemize}
+    \item \textbf{Dữ liệu:} Sử dụng tập dữ liệu chuẩn \textbf{Flickr8k}, bao gồm 8.000 hình ảnh, mỗi ảnh đi kèm với 5 câu mô tả (captions). Đây là tập dữ liệu có kích thước vừa phải, phù hợp cho việc thử nghiệm các mô hình học sâu trong môi trường học thuật.
+    \item \textbf{Mô hình:}
+    \begin{itemize}
+        \item \textit{Encoder (Mã hóa):} Sử dụng các mạng CNN pre-trained trên tập ImageNet (ResNet50, EfficientNetB2, EfficientNetB3) để trích xuất vector đặc trưng, bỏ qua lớp phân loại cuối cùng.
+        \item \textit{Decoder (Giải mã):} Sử dụng mạng LSTM (Long Short-Term Memory) để xử lý chuỗi từ vựng và sinh câu.
+    \end{itemize}
+    \item \textbf{Công cụ thực nghiệm:} Ngôn ngữ lập trình Python, thư viện Deep Learning (TensorFlow/Keras hoặc PyTorch) trên môi trường Google Colab/Kaggle.
+\end{itemize}
+\subsection{Bố cục báo cáo}
+Báo cáo được trình bày thành 5 phần chính với nội dung cụ thể như sau:
+
+\begin{itemize}
+    \item \textbf{Phần 1: Giới thiệu.} Trình bày lý do chọn đề tài, mục tiêu và phạm vi nghiên cứu của nhóm.
+    \item \textbf{Phần 2: Cơ sở lý thuyết.} Giới thiệu các kiến thức nền tảng về mạng CNN, RNN/LSTM, kiến trúc Encoder-Decoder và các độ đo đánh giá mô hình.
+    \item \textbf{Phần 3: Phương pháp đề xuất.} Mô tả chi tiết quy trình xây dựng hệ thống, từ tiền xử lý dữ liệu Flickr8k, kiến trúc chi tiết của các mô hình ResNet/EfficientNet kết hợp với LSTM, đến chiến lược huấn luyện.
+    \item \textbf{Phần 4: Thực nghiệm và Đánh giá.} Trình bày môi trường cài đặt, kết quả huấn luyện thực tế và so sánh hiệu năng giữa các backbone ResNet50, EfficientNetB2 và EfficientNetB3. Đồng thời phân tích các trường hợp mô hình dự đoán tốt và chưa tốt.
+    \item \textbf{Phần 5: Kết luận.} Tóm tắt kết quả đạt được và đề xuất các hướng phát triển trong tương lai.
+\end{itemize}
+\section{Thu thập và tiền xử lý dữ liệu} \label{sec:rel_res2}
+\subsection{Thu thập và khám phá dữ liệu}
+\subsection{Tiền xử lý dữ liệu}
+Quá trình tiền xử lý được chia làm hai luồng riêng biệt: xử lý hình ảnh đầu vào cho phần Encoder và xử lý văn bản mô tả cho phần Decoder.
+\subsubsection{Tiền xử lý dữ liệu ảnh (Image Preprocessing)}
+Để tận dụng các mô hình đã được huấn luyện trước (Pre-trained models) như ResNet50 và EfficientNet, hình ảnh gốc cần được biến đổi để phù hợp với định dạng đầu vào mà các mạng này yêu cầu. Các bước thực hiện bao gồm:
+
+\begin{itemize}
+    \item \textbf{Thay đổi kích thước (Resizing):} Tất cả các ảnh trong tập dữ liệu có kích thước không đồng nhất. Nhóm em thực hiện đưa toàn bộ ảnh về kích thước cố định là $224 \times 224$ pixel (đối với ResNet50) hoặc kích thước tương ứng phù hợp với từng phiên bản EfficientNet (B2, B3). Việc này đảm bảo tính nhất quán của ma trận đầu vào.
+    
+    \item \textbf{Chuẩn hóa (Normalization):} Các giá trị điểm ảnh (pixel) nằm trong khoảng $[0, 255]$ được chuẩn hóa. Đối với các mạng sử dụng trọng số của ImageNet, việc chuẩn hóa thường bao gồm trừ đi giá trị trung bình (mean) và chia cho độ lệch chuẩn (std) của tập ImageNet, hoặc đưa giá trị về khoảng $[-1, 1]$ hoặc $[0, 1]$ tùy theo yêu cầu cụ thể của từng hàm tiền xử lý (ví dụ: \texttt{preprocess\_input} của Keras).
+    
+    \item \textbf{Trích xuất đặc trưng (Feature Extraction):} Thay vì đưa trực tiếp ảnh thô vào huấn luyện, nhóm sử dụng các mạng CNN (ResNet50, EfficientNet) để "quét" qua ảnh và trích xuất ra vector đặc trưng (feature vector).
+    \begin{itemize}
+        \item Ảnh đầu vào $I$ đi qua mạng CNN sẽ cho ra vector $V$ có kích thước cố định (ví dụ: $2048$ chiều cho ResNet50).
+        \item Vector này đóng vai trò là đại diện ngữ nghĩa của bức ảnh và sẽ là đầu vào cho mạng LSTM cũng như Transformer sau này.
+    \end{itemize}
+\end{itemize}
+\subsubsection{Tiền xử lý dữ liệu nhãn (Text Preprocessing)}
+Các câu mô tả trong tập dữ liệu là ngôn ngữ tự nhiên, do đó cần được chuyển đổi thành dạng số học (vector) để máy tính có thể hiểu và xử lý. Quy trình xử lý văn bản bao gồm các bước sau:
+
+\begin{enumerate}
+    \item \textbf{Làm sạch văn bản (Cleaning):}
+    \begin{itemize}
+        \item Chuyển toàn bộ văn bản về chữ thường (lowercase) để tránh việc mô hình phân biệt giữa ``Dog'' và ``dog''.
+        \item Loại bỏ các dấu câu (chấm, phẩy, chấm than...) và các ký tự đặc biệt.
+        \item Loại bỏ các từ chứa số hoặc các từ có độ dài quá ngắn (ví dụ: 'a', 'is') nếu không cần thiết, tuy nhiên nhóm quyết định giữ lại để đảm bảo tính tự nhiên của câu.
+    \end{itemize}
+    
+    \item \textbf{Thêm token đặc biệt (Special Tokens):}
+    Mô hình cần biết khi nào bắt đầu sinh câu và khi nào kết thúc câu. Nhóm thêm hai từ khóa đặc biệt vào mỗi câu:
+    \begin{itemize}
+        \item \texttt{<startseq>}: Đánh dấu bắt đầu câu.
+        \item \texttt{<endseq>}: Đánh dấu kết thúc câu.
+    \end{itemize}
+    \textit{Ví dụ:} Câu gốc ``A dog is running'' $\rightarrow$ ``\texttt{<start>} a dog is running \texttt{<end>}''.
+    
+    \item \textbf{Xây dựng từ điển (Vocabulary Building):}
+    Nhóm liệt kê tất cả các từ xuất hiện trong tập huấn luyện để tạo thành một bộ từ điển. Những từ xuất hiện quá ít (ví dụ: dưới 5 lần) có thể được loại bỏ hoặc gán nhãn \texttt{<UNK>} (Unknown) để giảm nhiễu và kích thước mô hình. Mỗi từ sau đó được ánh xạ sang một số nguyên duy nhất (Index) dựa theo số thứ tự của chúng trong bộ từ điển.
+    
+    \item \textbf{Padding (Thêm đệm):}
+    Các câu mô tả có độ dài ngắn khác nhau, nhưng mô hình học sâu yêu cầu đầu vào dạng tensor có kích thước cố định. Nhóm xác định độ dài lớn nhất của một câu trong tập dữ liệu (max\_length) và thực hiện thêm các giá trị $0$ (padding) vào sau các câu ngắn hơn để tất cả đều có cùng độ dài.
+\end{enumerate}
+\section{Phương pháp đề xuất}\label{sec:rel_res4}
+\subsection{Cơ sở lý thuyết}
+Để giải quyết bài toán Image Captioning, hệ thống cần sự kết hợp giữa khả năng trích xuất đặc trưng hình ảnh của Thị giác máy tính và khả năng xử lý dữ liệu chuỗi của Xử lý ngôn ngữ tự nhiên. Phần này sẽ trình bày các nền tảng lý thuyết chính bao gồm Mạng nơ-ron tích chập (CNN), Mạng nơ-ron hồi quy (RNN/LSTM), kiến trúc Encoder-Decoder và phương pháp đánh giá mô hình.
+
+\subsubsection{Mạng nơ-ron tích chập (Convolutional Neural Network - CNN)}
+Mạng nơ-ron tích chập (CNN) là một trong những kiến trúc mạng nơ-ron chuyên biệt và hiệu quả nhất trong việc xử lý dữ liệu dạng lưới, đặc biệt là hình ảnh. Khác với mạng nơ-ron truyền thống (Fully Connected), CNN sử dụng phép tích chập (convolution) để trích xuất các đặc trưng địa phương (local features) như cạnh, màu sắc, họa tiết, từ đó tổng hợp thành các đặc trưng cấp cao hơn.
+
+Trong bài toán này, CNN đóng vai trò là bộ mã hóa (Encoder), nhiệm vụ là biến đổi hình ảnh đầu vào thành một vector đặc trưng (feature vector) cô đọng. Nhóm em sử dụng kỹ thuật \textbf{Học chuyển giao (Transfer Learning)} với các mô hình đã được huấn luyện trước trên tập dữ liệu ImageNet:
+
+\begin{itemize}
+    \item \textbf{ResNet50 (Residual Network):} Kiến trúc giải quyết vấn đề ``biến mất gradient'' (vanishing gradient) trong các mạng sâu bằng cách sử dụng các kết nối tắt (skip connections) hay các khối dư (residual blocks). Điều này cho phép mạng học được các hàm đồng nhất (identity mappings), giúp việc huấn luyện mạng sâu trở nên dễ dàng hơn.
+    
+    \item \textbf{EfficientNet (B2, B3):} Đây là họ mô hình tối ưu hóa sự cân bằng giữa chiều sâu (depth), chiều rộng (width) và độ phân giải (resolution) của mạng thông qua phương pháp \textit{Compound Scaling}. EfficientNet cho hiệu năng trích xuất đặc trưng rất tốt với số lượng tham số ít hơn nhiều so với các mô hình cùng độ chính xác khác.
+\end{itemize}
+
+\subsubsection{Mạng nơ-ron hồi quy và LSTM}
+{ - Hạn chế của RNN truyền thống}
+Mạng nơ-ron hồi quy (Recurrent Neural Network - RNN) được thiết kế để xử lý dữ liệu chuỗi (như văn bản, lời nói). Tuy nhiên, RNN truyền thống gặp phải vấn đề nghiêm trọng là \textit{Vanishing Gradient} (triệt tiêu đạo hàm), khiến mạng không thể học được các phụ thuộc xa (long-term dependencies) trong câu văn dài. \\
+{- Long Short-Term Memory (LSTM)}
+Để khắc phục hạn chế của RNN, kiến trúc LSTM được giới thiệu bởi Hochreiter và Schmidhuber (1997). LSTM bổ sung một trạng thái tế bào (cell state) $C_t$ chạy xuyên suốt chuỗi thời gian, đóng vai trò như bộ nhớ dài hạn. Luồng thông tin trong LSTM được điều tiết bởi 3 cổng (gates):
+\begin{itemize}
+    \item \textbf{Cổng quên (Forget Gate - $f_t$):} Quyết định thông tin nào từ trạng thái trước đó $C_{t-1}$ sẽ bị loại bỏ.
+    \item \textbf{Cổng vào (Input Gate - $i_t$):} Quyết định thông tin mới nào sẽ được cập nhật vào trạng thái tế bào.
+    \item \textbf{Cổng ra (Output Gate - $o_t$):} Quyết định thông tin nào từ trạng thái tế bào sẽ được xuất ra làm trạng thái ẩn (hidden state) $h_t$.
+\end{itemize}
+
+Các công thức toán học cơ bản của một tế bào LSTM tại bước thời gian $t$ được mô tả như sau:
+
+\begin{equation}
+    \begin{aligned}
+        f_t &= \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \\
+        i_t &= \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \\
+        \tilde{C}_t &= \tanh(W_C \cdot [h_{t-1}, x_t] + b_C) \\
+        C_t &= f_t * C_{t-1} + i_t * \tilde{C}_t \\
+        o_t &= \sigma(W_o \cdot [h_{t-1}, x_t] + b_o) \\
+        h_t &= o_t * \tanh(C_t)
+    \end{aligned}
+\end{equation}
+
+Trong đó: $\sigma$ là hàm sigmoid, $\tanh$ là hàm tang hypebol, $W$ và $b$ là các trọng số và bias cần học, $x_t$ là đầu vào tại thời điểm $t$ (vector biểu diễn từ).
+
+\subsubsection{Kiến trúc Encoder-Decoder trong Image Captioning}
+Mô hình Image Captioning thường tuân theo kiến trúc Encoder-Decoder (Mã hóa - Giải mã):
+
+\begin{itemize}
+    \item \textbf{Encoder:} Là mạng CNN (đã loại bỏ lớp phân loại cuối cùng). Đầu vào là ảnh $I$, đầu ra là vector đặc trưng $V = CNN(I)$. Vector này chứa đựng thông tin ngữ nghĩa của bức ảnh.
+    \item \textbf{Decoder:} Là mạng LSTM. Tại bước thời gian đầu tiên, vector đặc trưng $V$ được đưa vào (thường là khởi tạo trạng thái ẩn hoặc nối với từ khóa bắt đầu \texttt{<start>}). Tại mỗi bước tiếp theo, LSTM nhận từ đã dự đoán ở bước trước đó làm đầu vào để dự đoán từ tiếp theo trong câu.
+\end{itemize}
+
+Quá trình này lặp lại cho đến khi LSTM dự đoán ra từ khóa kết thúc \texttt{<end>} hoặc đạt độ dài câu tối đa.
+
+\subsubsection{Độ đo đánh giá (Evaluation Metrics)}
+Việc đánh giá chất lượng câu mô tả sinh ra bởi máy tính là một tác vụ khó vì một bức ảnh có thể được mô tả đúng bằng nhiều cách khác nhau. Độ đo phổ biến nhất được sử dụng là \textbf{BLEU (Bilingual Evaluation Understudy)}.
+
+BLEU Score đánh giá độ tương đồng giữa câu máy sinh ra (Candidate) và các câu mẫu do người viết (References) dựa trên sự trùng khớp của các n-grams (cụm n từ liên tiếp).
+
+\begin{itemize}
+    \item \textbf{BLEU-n:} Đo lường độ chính xác của các cụm n từ (1-gram, 2-gram, 3-gram, 4-gram).
+    \item \textbf{Brevity Penalty (BP):} Một tham số phạt được áp dụng nếu câu sinh ra quá ngắn so với câu mẫu, nhằm tránh việc mô hình gian lận bằng cách chỉ sinh ra những từ quá an toàn nhưng thiếu thông tin.
+\end{itemize}
+Công thức tổng quát của BLEU:
+\begin{equation}
+    BLEU = BP \times \exp\left(\sum_{n=1}^{N} w_n \log p_n\right)
+\end{equation}
+Trong đó $p_n$ là độ chính xác của n-gram và $w_n$ là trọng số (thường là $1/N$).
+\subsection{Kiến trúc chi tiết - Toàn}
+- Trình bày kiến trúc CNN (Resnet50, EfficientNetB2-B3)\\
+- Trình bày kiến trúc LSTM \\
+- Trình bày kiến trúc LSTM + Attention \\
+- Trình bày kiến trúc Transformer \\
+\subsection{Hàm mất mát - Toàn}
+- Trình bày về hàm mất mát được sử dụng trong quá trình huấn luyện
+\subsection{Các chiến lược tối ưu}
+- Trình bày về các chiến lược tối ưu trong huấn luyện (Adam)\\
+- Trình bày về các kĩ thuật kiểm soát LR , dừng sớm nếu có .
+\section{Thực nghiệm và đánh giá}\label{sec:disc}
+\subsection{Cài đặt môi trường - Toàn}
+- Trình bày về cách cài đặt môi trường lập trình \\
+\subsection{Cấu hình huấn luyện - Toàn}
+- Trình bày cài đặt các thông số trong quá trình huấn luyện\\
+\subsection{Kết quả tổng quan}
+- Trình bày kết quả dưới dạng bảng \\
+- Nêu ra đánh giá tổng quan và mô hình có hiệu suất tốt nhất \\
+\subsection{Kết quả demo}
+- Nêu ra một vài kết quả ảnh demo và nhận xét
+\section{Kết luận và hướng phát triển - Tuấn}\label{sec:disc}
+\subsection{Kết luận}
+Thông qua bài tập lớn này, nhóm em đã xây dựng và triển khai thành công mô hình Image Captioning dựa trên kiến trúc Encoder-Decoder, kết hợp giữa mạng nơ-ron tích chập (CNN) và mạng nơ-ron hồi quy (LSTM) và Transformer. Các kết quả đạt được có thể tóm tắt như sau:
+
+\begin{itemize}
+    \item \textbf{Xây dựng quy trình hoàn chỉnh:} Nhóm đã thực hiện trọn vẹn quy trình từ tiền xử lý dữ liệu ảnh và văn bản trên tập Flickr8k, xây dựng mô hình, huấn luyện và đánh giá kết quả.
+    \item \textbf{Hiệu quả của Transfer Learning:} Thực nghiệm chứng minh việc sử dụng các mô hình pre-trained (ResNet50, EfficientNet) giúp trích xuất đặc trưng ảnh hiệu quả hơn nhiều so với việc huấn luyện CNN từ đầu, đặc biệt khi dữ liệu huấn luyện hạn chế.
+    \item \textbf{So sánh kiến trúc:} Kết quả định lượng (BLEU Score) cho thấy kiến trúc sử dụng \textbf{EfficientNetB3 + LSTM + Attention} mang lại kết quả tốt nhất, vượt trội hơn so với ResNet50 và EfficientNetB2. Điều này khẳng định rằng ngoài kiến trúc encoder ,  các mô hình encoder tiên tiến đóng vai trò quan trọng trong chất lượng vector ngữ cảnh sinh ra.
+    \item \textbf{Kết quả định tính:} Mô hình đã có khả năng sinh ra các câu mô tả đúng ngữ pháp và nắm bắt được các đối tượng chính trong ảnh (ví dụ: ``dog'', ``man'', ``playing'', ``beach'').
+\end{itemize}
+\subsection{Hạn chế}
+Bên cạnh những kết quả đạt được, mô hình hiện tại vẫn còn tồn tại một số hạn chế nhất định:
+
+\begin{itemize}
+    \item \textbf{Kích thước dữ liệu:} Tập dữ liệu Flickr8k (8.000 ảnh) là tương đối nhỏ so với các tập dữ liệu lớn như MS-COCO (hơn 100.000 ảnh). Điều này khiến vốn từ vựng của mô hình bị giới hạn và khả năng tổng quát hóa (generalization) chưa cao khi gặp các tình huống hoặc vật thể lạ ngoài tập huấn luyện.
+    \item \textbf{Hạn chế của kiến trúc LSTM:} Việc nén toàn bộ thông tin ảnh vào một vector đặc trưng duy nhất (context vector) trước khi đưa vào LSTM có thể gây mất mát thông tin, đặc biệt với các bức ảnh có nhiều chi tiết phức tạp. Mô hình hiện tại chưa có cơ chế để ``tập trung'' vào các vùng ảnh khác nhau tại mỗi bước sinh từ.
+    \item \textbf{Lỗi ngữ nghĩa:} Trong một số trường hợp, mô hình nhận diện đúng đối tượng nhưng sai hành động hoặc mối quan hệ (ví dụ: nhận diện ``con chó'' nhưng nhầm hành động ``chạy'' thành ``ngủ'').
+\end{itemize}
+\subsection{Hướng phát triển}
+Dựa trên những hạn chế đã phân tích, nhóm em đề xuất các hướng phát triển để cải thiện hệ thống trong tương lai:
+
+\begin{itemize}
+    \item \textbf{Mở rộng dữ liệu:} Huấn luyện mô hình trên tập dữ liệu lớn hơn như MS-COCO để mở rộng vốn từ vựng và khả năng nhận diện đa dạng các ngữ cảnh.
+    \item \textbf{Fine-tuning Encoder:} Thay vì đóng băng (freeze) hoàn toàn các lớp CNN, có thể mở một vài lớp cuối cùng của Encoder để huấn luyện tinh chỉnh (fine-tune) cùng với Decoder, giúp đặc trưng ảnh thích nghi tốt hơn với tác vụ Captioning cụ thể.
+\end{itemize}
+
+\section*{Acknowledgments}
+\begin{thebibliography}{99}
+
+%
+
+\end{thebibliography}
+\end{document}

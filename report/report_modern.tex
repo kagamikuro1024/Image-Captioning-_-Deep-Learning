@@ -1,0 +1,525 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{adjustbox}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+% Header & Footer
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Báo cáo Học sâu}
+\rhead{2026}
+\cfoot{\thepage}
+
+% Section formatting
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection.}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries}{\thesubsubsection.}{1em}{}
+
+% Title page
+\begin{document}
+
+% Cover page
+\begin{titlepage}
+    \centering
+    {\scshape\LARGE Đại học Bách Khoa Hà Nội \\[0.5em]}
+    {\scshape\Large Trường Công nghệ Thông tin và Truyền thông \\[1em]}
+    \includegraphics[width=0.18\textwidth]{chapters/coverpage/image/logo-hust.png}\\[1em]
+    {\LARGE\bfseries BÁO CÁO BÀI TẬP LỚN}\\[0.5em]
+    {\Large\bfseries Học sâu và ứng dụng}\\[1em]
+    {\Large\bfseries Đề tài: Ứng dụng kiến trúc Encoder-Decoder với CNN và LSTM cho bài toán gán nhãn ảnh}\\[2em]
+    \begin{tabular}{ll}
+        \textbf{Giảng viên hướng dẫn:} & PGS.TS. Nguyễn Thị Kim Anh \\[1em]
+        \textbf{Nhóm sinh viên:} & Tạ Quốc Tuấn (20225110) \\
+        & Phan Trọng Đức (20224957) \\
+        & Đoàn Ngọc Toàn (20225193) \\
+        & Lê Văn Quang Trung (20225104) \\[1em]
+        \textbf{Mã lớp:} & 162297 \\
+    \end{tabular}\\[2em]
+    \vfill
+    Hà Nội, tháng 1 năm 2026
+\end{titlepage}
+
+% Assignment page
+
+\newpage
+\section*{Phân công công việc}
+\begin{table}[H]
+    \centering
+    \caption*{\textbf{Bảng phân công công việc và điểm số}}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{|c|c|p{6.5cm}|c|}
+        \hline
+        \textbf{Họ và tên} & \textbf{MSSV} & \centering\textbf{Công việc chính} & \textbf{Điểm (10)} \\
+        \hline
+        Tạ Quốc Tuấn & 20225110 & Tổng hợp tài liệu, viết báo cáo, xây dựng mô hình EfficientNet, kiểm thử & 9.5 \\
+        \hline
+        Phan Trọng Đức & 20224957 & Tiền xử lý dữ liệu, xây dựng mô hình ResNet50, đánh giá kết quả & 9.0 \\
+        \hline
+        Đoàn Ngọc Toàn & 20225193 & Thiết kế giải thuật, tối ưu hóa huấn luyện, phân tích kết quả & 10.0 \\
+        \hline
+        Lê Văn Quang Trung & 20225104 & Viết code attention, xây dựng script inference, trình bày báo cáo & 9.5 \\
+        \hline
+    \end{tabular}
+
+\end{table}
+
+% Table of contents
+\newpage
+\tableofcontents
+\newpage
+
+% Abstract
+\section*{Tóm tắt}
+\addcontentsline{toc}{section}{Tóm tắt}
+Trong lĩnh vực Trí tuệ nhân tạo hiện đại, bài toán sinh mô tả ảnh tự động (Image Captioning) là cầu nối giữa Thị giác máy tính (Computer Vision) và Xử lý ngôn ngữ tự nhiên (NLP). Báo cáo này trình bày chi tiết quá trình xây dựng, huấn luyện và đánh giá một hệ thống sinh caption cho ảnh dựa trên kiến trúc Encoder-Decoder, kết hợp các backbone CNN mạnh mẽ (ResNet50, EfficientNet B2/B3/B4) với LSTM và Attention. Hệ thống được kiểm thử trên hai bộ dữ liệu chuẩn Flickr8k và Flickr30k, sử dụng nhiều kỹ thuật hiện đại như Transfer Learning, Label Smoothing, Early Stopping, Beam Search, TensorBoard logging. Kết quả thực nghiệm cho thấy EfficientNetB3 + LSTM + Attention đạt BLEU-1 và METEOR cao nhất trên Flickr8k, ResNet50 có BLEU-4 tốt nhất. Báo cáo cũng phân tích chi tiết pipeline xử lý dữ liệu, các bước tiền xử lý, xây dựng từ điển, trích xuất đặc trưng, thiết kế mô hình, tối ưu hóa, đánh giá định lượng và định tính, cũng như các hướng phát triển mở rộng trong tương lai.
+
+% Main content
+\newpage
+\section{Giới thiệu}
+\subsection{Đặt vấn đề}
+Hình ảnh là một trong những dạng dữ liệu phổ biến nhất trên Internet, mạng xã hội, báo chí, thương mại điện tử... Việc mô tả nội dung ảnh là bản năng của con người nhưng lại là thách thức lớn với máy tính, bởi nó đòi hỏi khả năng "hiểu" cả hình ảnh lẫn ngôn ngữ. Bài toán Image Captioning ra đời nhằm giải quyết thách thức này: sinh ra một câu mô tả tự nhiên, chính xác cho một ảnh bất kỳ. Ứng dụng thực tiễn rất rộng: hỗ trợ người khiếm thị, tìm kiếm hình ảnh thông minh, tự động phân loại dữ liệu, tạo mô tả cho ảnh sản phẩm, kiểm duyệt nội dung, v.v. Đây là một trong những bài toán tiêu biểu cho sự giao thoa giữa Computer Vision và NLP.
+
+\subsection{Mục tiêu đề tài}
+Mục tiêu của đề tài là xây dựng một hệ thống học sâu nhận đầu vào là ảnh bất kỳ và sinh ra câu mô tả tiếng Anh tự nhiên, chính xác nhất có thể. Cụ thể:
+\begin{itemize}
+    \item Nghiên cứu, tổng hợp lý thuyết về kiến trúc Encoder-Decoder, Attention, các backbone CNN hiện đại.
+    \item Triển khai pipeline xử lý dữ liệu, tiền xử lý ảnh và caption, xây dựng từ điển, padding, chuẩn hóa.
+    \item Xây dựng mô hình Encoder-Decoder với các backbone: ResNet50, EfficientNet B2/B3/B4, kết hợp LSTM và Attention.
+    \item Ứng dụng Transfer Learning, tối ưu hóa quá trình huấn luyện (Label Smoothing, Early Stopping, ReduceLROnPlateau, Gradient Clipping).
+    \item Đánh giá hiệu năng mô hình trên các bộ dữ liệu chuẩn bằng BLEU, METEOR, phân tích định lượng và định tính.
+    \item So sánh, rút ra nhận xét về ưu nhược điểm từng backbone, đề xuất hướng phát triển tiếp theo.
+\end{itemize}
+
+\subsection{Phạm vi nghiên cứu}
+\begin{itemize}
+    \item \textbf{Dữ liệu:} Flickr8k (8.091 ảnh, 5 caption/ảnh), Flickr30k (31.783 ảnh, 5 caption/ảnh), mỗi ảnh có nhiều mô tả đa dạng, giúp mô hình học được nhiều ngữ cảnh.
+    \item \textbf{Mô hình:} Encoder: CNN (ResNet50, EfficientNetB2, B3, B4, pretrained ImageNet); Decoder: LSTM + Bahdanau Attention.
+    \item \textbf{Công cụ:} Python 3.8+, PyTorch 2.0+, Google Colab/Kaggle, TensorBoard, VS Code, LaTeX.
+    \item \textbf{Đánh giá:} BLEU-1,2,3,4, METEOR, so sánh định lượng và định tính.
+\end{itemize}
+
+\subsection{Bố cục báo cáo}
+\begin{itemize}
+    \item Giới thiệu: Đặt vấn đề, mục tiêu, phạm vi, ý nghĩa thực tiễn.
+    \item Cơ sở lý thuyết: Tổng quan các kiến trúc CNN, LSTM, Attention, BLEU/METEOR, pipeline tổng quát.
+    \item Phương pháp đề xuất: Quy trình xử lý dữ liệu, chi tiết pipeline, thiết kế mô hình, tối ưu hóa, cài đặt.
+    \item Thực nghiệm và đánh giá: Mô tả chi tiết quá trình huấn luyện, so sánh kết quả, phân tích ưu nhược điểm từng mô hình, ví dụ thực tế.
+    \item Kết luận và hướng phát triển: Tổng kết, rút ra bài học, đề xuất cải tiến.
+\end{itemize}
+
+\newpage
+\section{Cơ sở lý thuyết}
+\subsection{Mạng nơ-ron tích chập (CNN)}
+CNN (Convolutional Neural Network) là kiến trúc chủ đạo cho xử lý ảnh, sử dụng các lớp tích chập để trích xuất đặc trưng không gian cục bộ, giảm số lượng tham số so với fully connected. Trong bài toán này, CNN đóng vai trò Encoder, biến đổi ảnh thành vector đặc trưng (feature map) làm đầu vào cho Decoder.
+\begin{itemize}
+    \item \textbf{ResNet50:} Kiến trúc sâu 50 lớp, sử dụng skip connections (residual) để giải quyết vanishing gradient, giúp huấn luyện mạng sâu hiệu quả. Đầu ra feature map kích thước $(49, 2048)$ (7x7 spatial grid).
+    \item \textbf{EfficientNet (B2, B3, B4):} Sử dụng compound scaling để tối ưu đồng thời depth, width, resolution. Số tham số ít hơn ResNet nhưng hiệu quả cao. Đầu ra feature map: B2 $(81, 1408)$, B3 $(100, 1536)$, B4 $(144, 1792)$.
+    \item \textbf{Transfer Learning:} Sử dụng trọng số pretrained trên ImageNet, chỉ fine-tune các lớp cuối hoặc giữ nguyên toàn bộ encoder.
+\end{itemize}
+
+\subsection{Mạng nơ-ron hồi quy và LSTM}
+RNN truyền thống gặp vanishing gradient, khó học phụ thuộc xa. LSTM (Hochreiter \& Schmidhuber, 1997) bổ sung cell state $C_t$ và 3 cổng (forget, input, output) giúp lưu trữ thông tin dài hạn, truyền thông tin qua nhiều bước thời gian. Công thức LSTM:
+\begin{align*}
+    f_t &= \sigma(W_f [h_{t-1}, x_t] + b_f) \\
+    i_t &= \sigma(W_i [h_{t-1}, x_t] + b_i) \\
+    	ilde{C}_t &= \tanh(W_C [h_{t-1}, x_t] + b_C) \\
+    C_t &= f_t * C_{t-1} + i_t * \tilde{C}_t \\
+    o_t &= \sigma(W_o [h_{t-1}, x_t] + b_o) \\
+    h_t &= o_t * \tanh(C_t)
+\end{align*}
+LSTM giúp mô hình học được các phụ thuộc dài hạn trong chuỗi caption, giảm hiện tượng mất thông tin khi sequence dài.
+
+\subsection{Kiến trúc Encoder-Decoder với Attention}
+
+\textbf{Quy trình xử lý tổng quát:}
+
+\begin{enumerate}
+    \item \textbf{Input Image} → Ảnh RGB bất kỳ
+    \item \textbf{CNN Encoder:} Trích xuất feature map $(N, D)$ với $N$ vùng ảnh, $D$ chiều đặc trưng
+    \begin{itemize}
+        \item ResNet50: $(49, 2048)$ - 7×7 spatial grid
+        \item EfficientNet-B2: $(81, 1408)$ - 9×9 grid
+        \item EfficientNet-B3: $(100, 1536)$ - 10×10 grid
+        \item EfficientNet-B4: $(144, 1792)$ - 12×12 grid
+    \end{itemize}
+    \item \textbf{Attention Mechanism:} Tại mỗi timestep $t$:
+    \begin{align*}
+        \alpha_t &= \text{softmax}(v^T \cdot \tanh(W_{enc} \cdot V + W_{dec} \cdot h_{t-1})) \\
+        c_t &= \sum_{i=1}^{N} \alpha_{t,i} \cdot V_i \quad \text{(context vector)}
+    \end{align*}
+    \item \textbf{LSTM Decoder:} Sinh từ tiếp theo dựa trên $c_t$ và từ trước đó:
+    \begin{align*}
+        h_t, c_t &= \text{LSTM}([\text{Embed}(w_{t-1}); c_t], h_{t-1}, c_{t-1}) \\
+        y_t &= \text{softmax}(W \cdot h_t)
+    \end{align*}
+    \item \textbf{Output:} Chuỗi từ $w_1, w_2, ..., w_T$ tạo thành caption
+\end{enumerate}
+
+\textbf{Code snippet minh họa (EfficientNet):}
+\begin{verbatim}
+class EfficientNetEncoder(nn.Module):
+    def __init__(self, variant='b3'):
+        super().__init__()
+        self.effnet = efficientnet_b3(weights='IMAGENET1K_V1')
+        self.effnet.classifier = nn.Identity()
+        # Output: (batch, 1536, 10, 10)
+    
+    def forward(self, images):
+        features = self.effnet.features(images)
+        N, D, H, W = features.shape
+        features = features.view(N, D, H*W).permute(0, 2, 1)
+        # Return: (batch, 100, 1536)
+        return features
+\end{verbatim}
+
+\subsection{Độ đo đánh giá}
+\begin{itemize}
+    \item \textbf{BLEU:} Đánh giá dựa trên n-gram trùng giữa caption sinh ra và caption mẫu. BLEU-1 đến BLEU-4, càng cao càng tốt. Nhược điểm: không nhạy với caption ngắn, không xét ngữ nghĩa.
+    \item \textbf{METEOR:} Đánh giá dựa trên precision, recall, fragment penalty, nhạy hơn BLEU với caption ngắn, có xét đồng nghĩa, gốc từ.
+\end{itemize}
+
+\newpage
+\section{Phương pháp đề xuất}
+\subsection{Tiền xử lý dữ liệu}
+\textbf{Ảnh:} Mỗi ảnh được resize đúng kích thước yêu cầu của backbone (224x224 cho ResNet50, 260x260 cho B2, 300x300 cho B3, 380x380 cho B4), sau đó chuẩn hóa theo mean/std ImageNet. Ảnh được truyền qua CNN pretrained để trích xuất feature map, lưu lại dưới dạng file .pkl để tăng tốc training.
+
+\textbf{Văn bản:} Caption được chuyển về chữ thường, loại bỏ ký tự đặc biệt, số, từ ngắn. Thêm token đặc biệt (startseq, endseq), xây dựng từ điển (vocab) với min\_freq=1 (Flickr8k), min\_freq=2 (Flickr30k). Padding tất cả caption về cùng độ dài (max 34-40 từ), gán chỉ số cho từng từ.
+
+\subsection{Kiến trúc mô hình}
+\begin{itemize}
+    \item \textbf{Encoder:} ResNet50/EfficientNet (B2, B3, B4), đầu ra feature map (N, D), N là số vùng ảnh, D là số chiều đặc trưng.
+    \item \textbf{Attention:} Bahdanau attention, tại mỗi bước sinh từ, tính trọng số cho từng vùng ảnh dựa trên hidden state hiện tại và feature map, tạo context vector động.
+    \item \textbf{Decoder:} LSTM, nhận context vector từ attention và embedding của từ trước đó, sinh ra hidden state mới và dự đoán từ tiếp theo qua fully connected + softmax.
+\end{itemize}
+\textbf{Các siêu tham số chính:}
+\begin{itemize}
+    \item Embedding size: 512
+    \item LSTM hidden size: 512
+    \item Attention dim: 512
+    \item Dropout: 0.3-0.5
+\end{itemize}
+
+\subsection{Hàm mất mát và tối ưu}
+\begin{itemize}
+    \item CrossEntropyLoss với label smoothing (0.1), bỏ qua <PAD> token khi tính loss.
+    \item Adam optimizer (lr=1e-4), weight decay 1e-5, ReduceLROnPlateau scheduler (factor 0.7, patience 1-2), early stopping (patience 5), gradient clipping (max norm 5.0).
+\end{itemize}
+
+\subsection{Cấu hình huấn luyện}
+
+\textbf{Hyperparameters chính:}
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+Tham số & Giá trị \\
+\midrule
+Batch Size & 12 (B3/B4), 20 (B2), 32 (B0) \\
+Epochs & 40-100 \\
+Learning Rate & 1e-4 (Flickr8k), 3e-4 (Flickr30k) \\
+Weight Decay & 1e-5 \\
+Label Smoothing & 0.1 \\
+Gradient Clipping & 5.0 \\
+Early Stopping Patience & 5 \\
+LR Scheduler Factor & 0.7 \\
+LR Scheduler Patience & 1-2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Cài đặt Loss Function:}
+\begin{verbatim}
+criterion = nn.CrossEntropyLoss(
+    ignore_index=vocab['<PAD>'],  # Bỏ qua padding
+    label_smoothing=0.1            # Giảm overconfidence
+)
+\end{verbatim}
+
+\textbf{Optimizer và Scheduler:}
+\begin{verbatim}
+optimizer = optim.Adam(
+    model.parameters(),
+    lr=1e-4,
+    weight_decay=1e-5
+)
+
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+    optimizer,
+    mode='min',
+    factor=0.7,
+    patience=1,
+    verbose=True
+)
+\end{verbatim}
+
+\textbf{Training Loop với Gradient Clipping:}
+\begin{verbatim}
+for epoch in range(EPOCHS):
+    for images, captions, lengths in train_loader:
+        optimizer.zero_grad()
+        outputs = model(images, captions, lengths)
+        loss = criterion(outputs, captions[:, 1:])
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
+        optimizer.step()
+\end{verbatim}
+
+\textbf{TensorBoard Logging:}
+\begin{itemize}
+    \item Train/Val Loss per epoch
+    \item BLEU-1,2,3,4 scores
+    \item METEOR score
+    \item Learning rate tracking
+    \item Attention weight visualization
+\end{itemize}
+
+\newpage
+\section{Thực nghiệm và đánh giá}
+\subsection{Cài đặt môi trường}
+\begin{itemize}
+    \item OS: Windows 10/11, Linux, macOS
+    \item Python: 3.8+
+    \item PyTorch: 2.0+, torchvision 0.15+
+    \item CUDA GPU (khuyến nghị): RTX 3050 Ti (4GB) chạy batch 12-32, RTX 3060 (6GB+) batch 32-64
+    \item RAM: 16GB+ (Flickr8k), 32GB+ (Flickr30k)
+    \item Cài đặt qua requirements.txt, hướng dẫn chi tiết trong README
+\end{itemize}
+
+\subsection{Kết quả tổng quan}
+\textbf{So sánh tất cả các mô hình trên Flickr8k (Test Set - Beam Search k=3):}
+
+\begin{table}[H]
+\centering
+\caption{EfficientNet + LSTM + Attention trên Flickr8k}
+\footnotesize
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{l@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c}
+\toprule
+Mô hình & BLEU-1 & BLEU-2 & BLEU-3 & BLEU-4 & METEOR & Avg Len & Len Ratio \\
+\midrule
+EffNet-B0 + LSTM + Attn & 0.5024 & 0.3366 & 0.2203 & 0.1362 & 0.2912 & 8.00 & 1.007 \\
+EffNet-B2 + LSTM + Attn & 0.5061 & 0.3404 & 0.2273 & 0.1453 & 0.2949 & 7.95 & 0.999 \\
+\textbf{EffNet-B3 + LSTM + Attn} & \textbf{0.5243} & \textbf{0.3540} & \textbf{0.2363} & \textbf{0.1507} & \textbf{0.3065} & \textbf{8.08} & \textbf{1.019} \\
+EffNet-B4 + LSTM + Attn & 0.4985 & 0.3303 & 0.2187 & 0.1361 & 0.2880 & 7.85 & 0.993 \\
+ResNet50 + LSTM + Attn & 0.5004 & 0.3329 & 0.2198 & 0.1368 & 0.2824 & 7.91 & 0.999 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{EfficientNet + Transformer Simple trên Flickr8k}
+\footnotesize
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{l@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c}
+\toprule
+Mô hình & BLEU-1 & BLEU-2 & BLEU-3 & BLEU-4 & METEOR & Avg Len & Len Ratio \\
+\midrule
+EffNet-B0 + Transformer & 0.4816 & 0.3184 & 0.2110 & 0.1332 & 0.2832 & 7.68 & 0.977 \\
+EffNet-B2 + Transformer & 0.4889 & 0.3308 & 0.2204 & 0.1388 & 0.2889 & 7.46 & 0.945 \\
+EffNet-B3 + Transformer & 0.4847 & 0.3283 & 0.2207 & 0.1405 & 0.2916 & 7.50 & 0.935 \\
+EffNet-B4 + Transformer & 0.4838 & 0.3246 & 0.2171 & 0.1372 & 0.2880 & 7.41 & 0.942 \\
+ResNet50 + Transformer & 0.4807 & 0.3307 & 0.2207 & 0.1392 & 0.2904 & 7.15 & 0.902 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\textbf{Nhận xét so sánh:}
+\begin{itemize}
+    \item \textbf{LSTM + Attention} vượt trội rõ rệt so với Transformer (BLEU-1: 0.52 vs 0.49)
+    \item \textbf{EfficientNet-B3} đạt kết quả tốt nhất với cả BLEU và METEOR
+    \item EfficientNet-B4 không tốt hơn B3 do overfitting với tham số lớn hơn
+    \item Len Ratio gần 1.0 cho thấy caption sinh ra có độ dài phù hợp
+\end{itemize}
+
+\textbf{Kết quả trên Flickr30k:}
+\begin{table}[H]
+\centering
+\caption{Kết quả trên Flickr30k}
+\begin{tabular}{lccccc}
+\toprule
+Mô hình & BLEU-1 & BLEU-2 & BLEU-3 & BLEU-4 & METEOR \\
+\midrule
+ResNet50 + LSTM + Attn & 0.5034 & 0.3268 & 0.2149 & 0.1319 & 0.2662 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Đánh giá trên toàn bộ training set:}
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+Model & Dataset & BLEU-1 & BLEU-2 & BLEU-3 & BLEU-4 & METEOR \\
+\midrule
+ResNet50 & Flickr8k & 0.5995 & 0.4425 & 0.3210 & 0.2227 & 0.3608 \\
+ResNet50 & Flickr30k & 0.5746 & 0.4071 & 0.2870 & 0.1943 & 0.3213 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Phân tích chi tiết}
+
+\subsubsection{So sánh EfficientNet Variants}
+\begin{itemize}
+    \item \textbf{EfficientNet-B3 (tốt nhất):}
+    \begin{itemize}
+        \item BLEU-1: 0.5243 (+4.4\% so với B0)
+        \item METEOR: 0.3065 (+5.3\% so với B0)
+        \item Feature map 10×10×1536 cung cấp đủ thông tin chi tiết
+        \item Cân bằng tốt giữa capacity và regularization
+    \end{itemize}
+    \item \textbf{EfficientNet-B4 (underperform):}
+    \begin{itemize}
+        \item Thấp hơn B3 mặc dù params lớn hơn
+        \item Overfitting do feature map 12×12×1792 quá lớn
+        \item Cần thêm regularization hoặc dữ liệu lớn hơn
+    \end{itemize}
+    \item \textbf{EfficientNet-B0, B2:}
+    \begin{itemize}
+        \item Hiệu quả tốt với ít tham số
+        \item Phù hợp khi tài nguyên hạn chế
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{LSTM + Attention vs Transformer}
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Kiến trúc & BLEU-1 (Avg) & METEOR (Avg) \\
+\midrule
+LSTM + Attention & 0.5063 & 0.2926 \\
+Transformer Simple & 0.4839 & 0.2884 \\
+\textbf{Improvement} & \textbf{+4.6\%} & \textbf{+1.5\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Lý do LSTM + Attention tốt hơn:}
+\begin{itemize}
+    \item LSTM ổn định hơn với dữ liệu nhỏ (8k samples)
+    \item Attention giúp tập trung vào vùng quan trọng
+    \item Transformer cần nhiều dữ liệu và tricks hơn để converge
+\end{itemize}
+
+\subsubsection{Thống kê Caption Length}
+\begin{itemize}
+    \item Avg Reference Length: 7.9-8.0 từ
+    \item Avg Predicted Length: 7.5-8.1 từ
+    \item Length Ratio: 0.935-1.019 (gần 1.0 là tốt)
+    \item LSTM + Attention có length ratio tốt hơn Transformer
+\end{itemize}
+
+\subsection{Beam Search Decoding}
+
+\textbf{Thuật toán Beam Search (k=3):}
+\begin{verbatim}
+def beam_search(model, image, vocab, beam_size=3, max_len=40):
+    # Trích xuất features
+    features = model.encoder(image)  # (1, N, D)
+    
+    # Khởi tạo beam với <START>
+    start_token = vocab['startseq']
+    beams = [(start_token, 0.0, [])]  # (token, log_prob, sequence)
+    
+    for step in range(max_len):
+        candidates = []
+        for token, score, seq in beams:
+            if token == vocab['endseq']:
+                candidates.append((token, score, seq))
+                continue
+            
+            # Dự đoán từ tiếp theo
+            probs = model.decoder(features, seq + [token])
+            top_k = torch.topk(probs, beam_size)
+            
+            for prob, next_token in zip(top_k.values, top_k.indices):
+                new_score = score + torch.log(prob)
+                candidates.append((next_token, new_score, seq + [token]))
+        
+        # Giữ top-k candidates
+        beams = sorted(candidates, key=lambda x: x[1], reverse=True)[:beam_size]
+    
+    return beams[0][2]  # Return best sequence
+\end{verbatim}
+
+\textbf{So sánh Greedy vs Beam Search:}
+\begin{itemize}
+    \item Greedy: Chọn từ xác suất cao nhất mỗi bước → Nhanh nhưng kém chất lượng
+    \item Beam (k=3): Xét 3 paths song song → Tốt hơn 2-3\% BLEU
+    \item Beam (k=5): Tăng thêm 0.5\% nhưng chậm hơn nhiều
+\end{itemize}
+
+\subsection{Kết quả demo}
+\textbf{Ví dụ dự đoán thực tế (EfficientNet-B3):}
+\begin{itemize}
+    \item \textbf{Ảnh:} 3066429707\_842e50b8f7.jpg\\
+    \textbf{Ground Truth:} girl in blue kicks the soccer ball\\
+    \textbf{Greedy:} girl is playing with ball\\
+    \textbf{Beam (k=3):} girl in red shirt is playing soccer\\
+    \textit{\small Beam Search nhận diện chi tiết hơn (red shirt, soccer).}
+    
+    \item \textbf{Ảnh:} 476740978\_45b65ebe0c.jpg\\
+    \textbf{Ground Truth:} people holding pink signs that spell out impeach\\
+    \textbf{Greedy:} people on street\\
+    \textbf{Beam (k=3):} group of people stand on the street\\
+    \textit{\small Beam Search sinh caption dài và chi tiết hơn.}
+    
+    \item \textbf{Ví dụ thành công:}\\
+    \textbf{Ground Truth:} dog running in grass\\
+    \textbf{Predicted:} brown dog runs through the grass\\
+    \textit{\small Caption dự đoán chính xác và tự nhiên.}
+\end{itemize}
+
+\newpage
+\section{Kết luận và hướng phát triển}
+\subsection{Kết luận}
+Nhóm đã xây dựng thành công hệ thống Image Captioning dựa trên Encoder-Decoder, thử nghiệm nhiều backbone CNN hiện đại, kết hợp LSTM và Attention, đánh giá định lượng (BLEU, METEOR) và định tính (caption thực tế). EfficientNetB3 + LSTM + Attention cho kết quả tốt nhất trên Flickr8k, ResNet50 mạnh ở caption ngắn, chính xác. Transfer Learning giúp trích xuất đặc trưng hiệu quả khi dữ liệu hạn chế, tiết kiệm thời gian huấn luyện. Pipeline xử lý dữ liệu, tiền xử lý, xây dựng vocab, trích xuất feature, huấn luyện, đánh giá đều được tự động hóa, dễ mở rộng.
+
+\subsection{Hạn chế}
+\begin{itemize}
+    \item Dữ liệu nhỏ (Flickr8k) hạn chế khả năng tổng quát hóa, dễ overfit.
+    \item LSTM dù có attention nhưng vẫn có thể mất mát thông tin với ảnh phức tạp, caption dài.
+    \item Một số caption dự đoán đúng đối tượng nhưng sai hành động, thiếu chi tiết.
+    \item Transformer đơn giản chưa đạt hiệu quả tốt do chưa fine-tune kỹ, cần thêm regularization.
+\end{itemize}
+
+\subsection{Hướng phát triển}
+\begin{itemize}
+    \item Mở rộng dữ liệu (MS-COCO, Conceptual Captions...)
+    \item Fine-tune các lớp cuối của Encoder, thử nghiệm các backbone mới (ConvNeXt, Swin Transformer...)
+    \item Thử nghiệm Transformer nâng cao, kết hợp các kỹ thuật augmentation, regularization, ensemble.
+    \item Triển khai inference real-time, xây dựng demo web/app.
+\end{itemize}
+
+\newpage
+\section*{Tài liệu tham khảo}
+\addcontentsline{toc}{section}{Tài liệu tham khảo}
+\begin{enumerate}
+    \item Xu, K., Ba, J., Kiros, R., Cho, K., Courville, A., Salakhutdinov, R., Zemel, R., \& Bengio, Y. (2015). Show, Attend and Tell: Neural Image Caption Generation with Visual Attention. \textit{ICML}. \url{https://arxiv.org/abs/1502.03044}
+    \item He, K., Zhang, X., Ren, S., \& Sun, J. (2016). Deep Residual Learning for Image Recognition. \textit{CVPR}. \url{https://arxiv.org/abs/1512.03385}
+    \item Tan, M., \& Le, Q. (2019). EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks. \textit{ICML}. \url{https://arxiv.org/abs/1905.11946}
+    \item Papineni, K., Roukos, S., Ward, T., \& Zhu, W. J. (2002). BLEU: a Method for Automatic Evaluation of Machine Translation. \textit{ACL}.
+    \item Banerjee, S., \& Lavie, A. (2005). METEOR: An Automatic Metric for MT Evaluation with Improved Correlation with Human Judgments. \textit{ACL Workshop}.
+    \item Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., \& Polosukhin, I. (2017). Attention is All You Need. \textit{NeurIPS}. \url{https://arxiv.org/abs/1706.03762}
+    \item Lin, T.-Y., Maire, M., Belongie, S., Hays, J., Perona, P., Ramanan, D., Dollár, P., \& Zitnick, C. L. (2014). Microsoft COCO: Common Objects in Context. \textit{ECCV}. \url{https://arxiv.org/abs/1405.0312}
+\end{enumerate}
+
+\end{document}
